@@ -10,11 +10,11 @@ const ExpressError = require("../expressError");
 
 class User {
 
-  /** register new user -- returns
-   *    {username, password, first_name, last_name, phone}
-   */
-
   static async register({ username, password, first_name, last_name, phone }) {
+    /** register new user -- returns
+     *    {username, password, first_name, last_name, phone}
+     */
+
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
     const join_at = new Date();
     const last_login_at = join_at;
@@ -25,9 +25,9 @@ class User {
     return results.rows[0];
   }
 
-  /** Authenticate: is this username/password valid? Returns boolean. */
-
   static async authenticate(username, password) {
+    /** Authenticate: is this username/password valid? Returns boolean. */
+
     const results = await db.query(`SELECT password FROM users
         WHERE username = $1`,
       [username]);
@@ -36,9 +36,9 @@ class User {
     return verified;
   }
 
-  /** Update last_login_at for user */
-
   static async updateLoginTimestamp(username) {
+    /** Update last_login_at for user */
+
     const last_login_at = new Date();
     await db.query(`UPDATE users
         SET last_login_at = $1
@@ -46,39 +46,39 @@ class User {
       [last_login_at, username]);
   }
 
-  /** All: basic info on all users:
-   * [{username, first_name, last_name, phone}, ...] */
-
   static async all() {
+    /** All: basic info on all users:
+     * [{username, first_name, last_name, phone}, ...] */
+
     const results = await db.query(`SELECT username, first_name, last_name, phone FROM users`);
     return results.rows;
   }
 
-  /** Get: get user by username
-   *
-   * returns {username,
-   *          first_name,
-   *          last_name,
-   *          phone,
-   *          join_at,
-   *          last_login_at } */
-
   static async get(username) {
+    /** Get: get user by username
+     *
+     * returns {username,
+     *          first_name,
+     *          last_name,
+     *          phone,
+     *          join_at,
+     *          last_login_at } */
+
     const results = await db.query(`SELECT username, first_name, last_name, phone, join_at, last_login_at FROM users
         WHERE username = $1`,
       [username]);
     return results.rows[0];
   }
 
-  /** Return messages from this user.
-   *
-   * [{id, to_user, body, sent_at, read_at}]
-   *
-   * where to_user is
-   *   {username, first_name, last_name, phone}
-   */
-
   static async messagesFrom(username) {
+    /** Return messages from this user.
+     *
+     * [{id, to_user, body, sent_at, read_at}]
+     *
+     * where to_user is
+     *   {username, first_name, last_name, phone}
+     */
+
     const messageResults = await db.query(`SELECT id, to_username, body, sent_at, read_at FROM messages
         WHERE from_username = $1`,
       [username]);
@@ -95,15 +95,15 @@ class User {
     return messages;
   }
 
-  /** Return messages to this user.
-   *
-   * [{id, from_user, body, sent_at, read_at}]
-   *
-   * where from_user is
-   *   {id, first_name, last_name, phone}
-   */
-
   static async messagesTo(username) {
+    /** Return messages to this user.
+     *
+     * [{id, from_user, body, sent_at, read_at}]
+     *
+     * where from_user is
+     *   {id, first_name, last_name, phone}
+     */
+
     const messageResults = await db.query(`SELECT id, from_username, body, sent_at, read_at FROM messages
         WHERE to_username = $1`,
       [username]);
@@ -114,10 +114,10 @@ class User {
           WHERE username = $1`,
         [message.from_username]);
       message.from_user = toUserResults.rows[0];
-      delete message.from_user;
+      delete message.from_username;
     }
 
-    return message;
+    return messages;
   }
 }
 
