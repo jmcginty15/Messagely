@@ -54,7 +54,7 @@ router.get('/:username/to', ensureCorrectUser, async (request, response, next) =
     }
 });
 
-router.get('/:username/to', ensureCorrectUser, async (request, response, next) => {
+router.get('/:username/from', ensureCorrectUser, async (request, response, next) => {
     /** GET /:username/from - get messages from user
      *
      * => {messages: [{id,

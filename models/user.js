@@ -46,7 +46,7 @@ class User {
     /** All: basic info on all users:
      * [{username, first_name, last_name, phone}, ...] */
 
-    const results = await db.query(`SELECT username, first_name, last_name, phone FROM users`);
+    const results = await db.query(`SELECT username, first_name, last_name, phone FROM users ORDER BY username`);
     return results.rows;
   }
 
