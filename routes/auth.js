@@ -23,7 +23,8 @@ router.post('/login', async (request, response, next) => {
 
             if (authenticated) {
                 await User.updateLoginTimestamp(username);
-                const token = jwt.sign(user, SECRET_KEY);
+                const payload = { username: user.username };
+                const token = jwt.sign(payload, SECRET_KEY);
                 return response.json({ token: token });
             } else {
                 throw new ExpressError('Invalid password', 400);
@@ -52,7 +53,8 @@ router.post('/register', async (request, response, next) => {
             throw new ExpressError('Username already taken', 400);
         } else {
             const user = await User.register(userInfo);
-            const token = jwt.sign(user, SECRET_KEY);
+            const payload = { username: user.username };
+            const token = jwt.sign(payload, SECRET_KEY);
             return response.json({ token: token });
         }
     } catch (err) {
